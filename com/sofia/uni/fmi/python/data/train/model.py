@@ -4,8 +4,6 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
 
-# we load the dataset, train and save the model for later use in the API
-
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 32
 SEED = 123
@@ -84,11 +82,20 @@ model.compile(
     metrics=["accuracy"],
 )
 
+callbacks = [
+    tf.keras.callbacks.EarlyStopping(
+        monitor="val_loss",
+        patience=2,
+        restore_best_weights=True
+    )
+]
+
 history = model.fit(
     train_ds,
-    epochs=10,
+    epochs=20,
     validation_data=val_ds,
-    class_weight=class_weight
+    class_weight=class_weight,
+    callbacks=callbacks
 )
 
 plt.plot(history.history["accuracy"], label="accuracy")
