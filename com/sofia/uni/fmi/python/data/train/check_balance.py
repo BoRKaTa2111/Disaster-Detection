@@ -1,5 +1,7 @@
 from pathlib import Path
 
+# used for checking the balance of the dataset (how many elements each class has) before training the model
+
 root = Path("../Comprehensive_Disaster_Dataset(CDD)").resolve()
 exts = {".jpg", ".jpeg", ".png"}
 

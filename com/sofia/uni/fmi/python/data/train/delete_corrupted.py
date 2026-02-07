@@ -23,15 +23,15 @@ for p in root.rglob("*"):
         data = tf.io.read_file(str(p))
 
         if ext in {".jpg", ".jpeg"}:
-            _ = tf.io.decode_jpeg(data, channels=3)
+            tf.io.decode_jpeg(data, channels=3)
         elif ext == ".png":
-            _ = tf.io.decode_png(data, channels=3)
+            tf.io.decode_png(data, channels=3)
         elif ext == ".bmp":
-            _ = tf.io.decode_bmp(data)
+            tf.io.decode_bmp(data)
         elif ext == ".gif":
-            _ = tf.io.decode_gif(data)
+           tf.io.decode_gif(data)
         elif ext == ".webp":
-            _ = tf.io.decode_webp(data)
+            tf.io.decode_webp(data)
 
     except Exception as e:
         bad.append((p, str(e)))
