@@ -99,7 +99,4 @@ plt.show()
 val_loss, val_acc = model.evaluate(val_ds, verbose=2)
 print("Validation accuracy:", val_acc)
 
-model.save(
-    "saved_model_disaster_classifier.keras",
-    include_optimizer=False
-)
+model.save("saved_model_disaster_classifier.keras")

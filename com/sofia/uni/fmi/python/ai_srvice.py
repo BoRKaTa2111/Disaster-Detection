@@ -32,17 +32,34 @@ with open(CLASSES_PATH, "r", encoding="utf-8") as f:
 print("Loaded model.")
 print("Classes:", class_names)
 
+# Extra debug: check folders match classes
+if DATASET_DIR.exists():
+    folders = sorted([p.name for p in DATASET_DIR.iterdir() if p.is_dir()])
+    print("Inference dataset dir:", DATASET_DIR)
+    print("Folders there:", folders)
+else:
+    print("WARNING: DATASET_DIR does not exist:", DATASET_DIR)
+
 # ---------- Prediction ----------
-def predict_image(image_path: Path, top_k: int = 3):
+def predict_image(image_path: Path, top_k: int = 3, debug: bool = False):
     if not image_path.exists():
         raise FileNotFoundError(f"Image not found: {image_path}")
 
+    # IMPORTANT: do NOT divide by 255 here because the saved model already has Rescaling(1./255)
     img = load_img(str(image_path), target_size=IMG_SIZE)
-    x = img_to_array(img).astype("float32") / 255.0
+    x = img_to_array(img).astype("float32")
     x = np.expand_dims(x, axis=0)
 
-    logits = model.predict(x, verbose=0)
-    probs = tf.nn.softmax(logits, axis=1).numpy()[0]
+    y = model.predict(x, verbose=0)
+
+    if debug:
+        s = float(np.sum(y))
+        print(f"[DEBUG] pred shape={y.shape} sum={s:.6f} raw={y[0]}")
+
+    # Your model was trained with from_logits=True and ends with Dense(num_classes) (no softmax),
+    # so y is logits -> apply softmax.
+    logits = y[0]
+    probs = tf.nn.softmax(logits).numpy()
 
     pred_id = int(np.argmax(probs))
     pred_label = class_names[pred_id]
@@ -53,8 +70,8 @@ def predict_image(image_path: Path, top_k: int = 3):
 
     return pred_label, pred_conf, top
 
-def print_prediction(image_path: Path, top_k: int = 3):
-    label, conf, top = predict_image(image_path, top_k)
+def print_prediction(image_path: Path, top_k: int = 3, debug: bool = False):
+    label, conf, top = predict_image(image_path, top_k=top_k, debug=debug)
     print(f"\nImage: {image_path}")
     print(f"Prediction: {label} (confidence {conf:.3f})")
     print(f"Top-{top_k}:")
@@ -65,16 +82,20 @@ def print_prediction(image_path: Path, top_k: int = 3):
 def pick_random_image_from_class(class_folder: str) -> Path:
     exts = {".jpg", ".jpeg", ".png"}
     folder = DATASET_DIR / class_folder
+    if not folder.exists():
+        raise RuntimeError(f"Class folder not found: {folder}")
+
     files = [p for p in folder.rglob("*") if p.is_file() and p.suffix.lower() in exts]
     if not files:
         raise RuntimeError(f"No images found in {folder}")
     return random.choice(files)
 
-def sanity_test_one_per_class():
+def sanity_test_one_per_class(debug_first: bool = True):
     print("\n--- Sanity test: 1 random image per class ---")
-    for cls in class_names:
+    for i, cls in enumerate(class_names):
         img_path = pick_random_image_from_class(cls)
-        label, conf, _ = predict_image(img_path)
+        # debug only on the first prediction to avoid spam
+        label, conf, _ = predict_image(img_path, debug=(debug_first and i == 0))
         print(
             f"True folder: {cls:25s} -> "
             f"Predicted: {label:25s} ({conf:.3f})   "
@@ -92,8 +113,9 @@ if __name__ == "__main__":
     ]
 
     print("\n=== Local test images ===")
-    for fname in test_files:
+    for j, fname in enumerate(test_files):
         p = TEST_IMAGES_DIR / fname
-        print_prediction(p, top_k=3)
+        # debug only for the first local image
+        print_prediction(p, top_k=3, debug=(j == 0))
 
-    sanity_test_one_per_class()
+    # sanity_test_one_per_class(debug_first=True)
