@@ -32,11 +32,6 @@ app = FastAPI(title="Disaster Classifier API", version="1.0")
 
 
 def preprocess_pil(img: Image.Image) -> np.ndarray:
-    """
-    Returns shape (1, 224, 224, 3) float32.
-    IMPORTANT: Do NOT divide by 255 here if your saved model already has Rescaling(1./255) inside.
-    Your model does.
-    """
     img = img.convert("RGB")
     img = img.resize(IMG_SIZE)
     x = np.asarray(img, dtype=np.float32)  # [0..255]
@@ -45,9 +40,6 @@ def preprocess_pil(img: Image.Image) -> np.ndarray:
 
 
 def predict_array(x: np.ndarray, top_k: int = DEFAULT_TOP_K) -> Tuple[str, float, List[Tuple[str, float]]]:
-    """
-    Predicts with logits -> softmax (because training used from_logits=True and last Dense has no activation).
-    """
     y = model.predict(x, verbose=0)
     if y.ndim != 2 or y.shape[1] != NUM_CLASSES:
         raise RuntimeError(f"Unexpected model output shape: {y.shape}")
