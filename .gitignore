@@ -1,3 +1,7 @@
+# Images for ML
+**/data/bad_images_quarantine/
+**/data/Comprehensive_Disaster_Dataset(CDD)/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
