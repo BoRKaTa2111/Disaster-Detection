@@ -176,3 +176,4 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+/com/sofia/uni/fmi/python/data/Comprehensive_Disaster_Dataset(CDD)/
