@@ -1,5 +1,4 @@
 import json
-import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
@@ -28,7 +27,7 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 
 class_names = train_ds.class_names
 num_classes = len(class_names)
-print(class_names)
+print("Classes:", class_names)
 
 with open("class_names.json", "w", encoding="utf-8") as f:
     json.dump(class_names, f)
@@ -47,13 +46,6 @@ for images, labels in train_ds_vis.take(1):
         plt.title(class_names[int(labels[i])])
         plt.axis("off")
 plt.show()
-
-counts = np.zeros(num_classes, dtype=np.int64)
-for _, labels in train_ds_vis:
-    counts += np.bincount(labels.numpy(), minlength=num_classes)
-
-total = counts.sum()
-class_weight = {i: float(total / (num_classes * counts[i])) for i in range(num_classes)}
 
 data_aug = tf.keras.Sequential([
     layers.RandomFlip("horizontal"),
@@ -94,7 +86,6 @@ history = model.fit(
     train_ds,
     epochs=20,
     validation_data=val_ds,
-    class_weight=class_weight,
     callbacks=callbacks
 )
 
@@ -106,6 +97,9 @@ plt.legend(loc="lower right")
 plt.show()
 
 val_loss, val_acc = model.evaluate(val_ds, verbose=2)
-print(val_acc)
+print("Validation accuracy:", val_acc)
 
-model.save("saved_model_disaster_classifier.keras")
+model.save(
+    "saved_model_disaster_classifier.keras",
+    include_optimizer=False
+)
