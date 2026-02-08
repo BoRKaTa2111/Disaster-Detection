@@ -92,7 +92,7 @@ history = model.fit(
 
 # 7. plot the training and validation accuracy over epochs to visualize the model's performance
 plt.plot(history.history["accuracy"], label="accuracy")
-plt.plot(history.history["validation_accuracy"], label="validation_accuracy")
+plt.plot(history.history["val_accuracy"], label="val_accuracy")
 plt.xlabel("Epoch")
 plt.ylabel("Accuracy")
 plt.legend(loc="lower right")
