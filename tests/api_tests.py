@@ -24,17 +24,17 @@ def make_jpeg_bytes() -> bytes:
 
 
 def test_predict_rejects_non_image_content_type():
-    r = client.post("/predict", files={"file": ("x.txt", b"hello", "text/plain")})
+    r = client.post("/predict", files={"file": ("kuche.txt", b"hello", "text/plain")})
     assert r.status_code == 415
 
 
 def test_predict_rejects_empty_file():
-    r = client.post("/predict", files={"file": ("x.jpg", b"", "image/jpeg")})
+    r = client.post("/predict", files={"file": ("kote.jpg", b"", "image/jpeg")})
     assert r.status_code == 400
 
 
 def test_predict_rejects_invalid_image_bytes():
-    r = client.post("/predict", files={"file": ("x.jpg", b"not-an-image", "image/jpeg")})
+    r = client.post("/predict", files={"file": ("hamster.jpg", b"not-an-image", "image/jpeg")})
     assert r.status_code == 400
 
 
@@ -44,7 +44,7 @@ def test_predict_success_with_mock_model(monkeypatch):
     img_bytes = make_jpeg_bytes()
     r = client.post(
         "/predict?top_k=3&model_name=224x224",
-        files={"file": ("img.jpg", img_bytes, "image/jpeg")},
+        files={"file": ("kote2.jpg", img_bytes, "image/jpeg")},
     )
 
     assert r.status_code == 200
@@ -60,7 +60,7 @@ def test_predict_unknown_model_name(monkeypatch):
     img_bytes = make_jpeg_bytes()
     r = client.post(
         "/predict?model_name=does_not_exist",
-        files={"file": ("img.jpg", img_bytes, "image/jpeg")},
+        files={"file": ("kuche2.jpg", img_bytes, "image/jpeg")},
     )
     assert r.status_code == 400
     assert "Unknown model_name" in r.text
