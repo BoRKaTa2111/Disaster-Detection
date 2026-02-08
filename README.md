@@ -9,6 +9,10 @@ This project implements a **machine learning system for detecting natural disast
 
 The goal is to **classify unseen images into predefined categories** using a convolutional neural network (CNN) and to provide a **demo REST API** through which users can upload images and receive predictions.
 
+Link ro repo : https://github.com/BoRKaTa2111/Disaster-Detection
+Note: The I-user is my work account. I
+had to clone the repo in the public version of GitHub,
+as I mistakenly created and developed the repo in the private one.
 ---
 
 ## Dataset
