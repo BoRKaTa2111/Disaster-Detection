@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-import ai_service as ai_service
+import ai_service
 
 class TestModel:
     def __init__(self, out: np.ndarray):
