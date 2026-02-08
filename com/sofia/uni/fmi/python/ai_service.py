@@ -1,6 +1,5 @@
 import io
 import json
-import logging
 from pathlib import Path
 from typing import List, Tuple
 
@@ -41,18 +40,18 @@ def preprocess_pil(img: Image.Image) -> np.ndarray:
 
 
 def predict_array(x: np.ndarray, top_k: int = DEFAULT_ANSWERS) -> Tuple[str, float, List[Tuple[str, float]]]:
-    # Validate input early
+    # validate input early
     if x.ndim != 4 or x.shape[-1] != 3:
         raise ValueError(f"Expected input shape (1,H,W,3). Got: {x.shape}")
 
     try:
         y = model.predict(x, verbose=0)
     except (tf.errors.InvalidArgumentError, tf.errors.OpError) as e:
-        # Typical TF runtime/predict issues (shape mismatch, invalid ops, etc.)
+        # typical TF runtime/predict issues (shape mismatch, invalid ops, etc.)
         raise RuntimeError(f"TensorFlow predict failed: {e.__class__.__name__}") from e
 
     if not isinstance(y, np.ndarray):
-        # Keras usually returns np.ndarray, but can vary with settings
+        # keras usually returns np.ndarray, but can vary with settings
         y = np.asarray(y)
 
     if y.ndim != 2 or y.shape[1] != NUM_CLASSES:
