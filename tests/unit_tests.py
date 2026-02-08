@@ -2,16 +2,14 @@ import numpy as np
 import pytest
 from PIL import Image
 
-import com.sofia.uni.fmi.python.ai_service as ai_service
+import ai_service as ai_service
 
-
-class DummyModel:
+class TestModel:
     def __init__(self, out: np.ndarray):
         self._out = out
 
     def predict(self, x, verbose=0):
         return self._out
-
 
 def test_preprocess_pil_shape_dtype():
     img = Image.new("RGB", (500, 300), color=(255, 0, 0))
