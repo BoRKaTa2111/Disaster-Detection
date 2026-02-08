@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9647b502-d576-48a2-970e-5290d2c19471" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ai_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.zip" beforeDir="false" afterPath="$PROJECT_DIR$/project.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_model.py" afterDir="false" />
-    </list>
+    <list default="true" id="9647b502-d576-48a2-970e-5290d2c19471" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -192,6 +187,17 @@
       <updated>1770224038093</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

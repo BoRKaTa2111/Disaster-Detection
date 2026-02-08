@@ -7,6 +7,14 @@ import matplotlib.pyplot as plt
 class TestData:
     class_names = ["Fire_Damage", "Land_Disaster", "Water_Disaster", "Non_Damage"]
 
+    def cache(self): return self
+
+    def shuffle(self, *a, **k): return self
+
+    def prefetch(self, *a, **k): return self
+
+
+
 class MockHist:
     history = {
         "accuracy": [0.3, 0.4],
@@ -14,6 +22,11 @@ class MockHist:
         "loss": [1.2, 1.0],
         "val_loss": [1.3, 1.1],
     }
+
+def cache(self): return self
+def shuffle(self, *a, **k): return self
+def prefetch(self, *a, **k): return self
+
 
 def test_training_script_runs_and_calls_expected_things(monkeypatch):
     calls = {
