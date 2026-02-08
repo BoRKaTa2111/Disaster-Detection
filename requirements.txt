@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+numpy
+pillow
+tensorflow
+pytest
+pytest-cov
+httpx
