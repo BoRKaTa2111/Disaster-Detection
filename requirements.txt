@@ -4,5 +4,6 @@ numpy
 pillow
 tensorflow
 pytest
+python-multipart
 pytest-cov
 httpx
