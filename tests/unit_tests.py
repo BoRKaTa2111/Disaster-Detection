@@ -22,7 +22,7 @@ def test_preprocess_pil_shape_dtype():
 
 def test_predict_array_rejects_bad_input_shape():
     out = np.zeros((1, ai_service.NUM_CLASSES), dtype=np.float32)
-    model = DummyModel(out)
+    model = TestModel(out)
 
     bad_x = np.zeros((224, 224, 3), dtype=np.float32)
 
@@ -32,7 +32,7 @@ def test_predict_array_rejects_bad_input_shape():
 
 def test_predict_array_raises_on_unexpected_output_shape():
     out = np.zeros((1, 2, 3), dtype=np.float32)
-    model = DummyModel(out)
+    model = TestModel(out)
 
     x = np.zeros((1, 224, 224, 3), dtype=np.float32)
 
@@ -45,7 +45,7 @@ def test_predict_array_topk_sorted_and_clamped():
     out[0, 1] = 10.0
     out[0, 0] = 5.0
     out[0, 2] = 1.0
-    model = DummyModel(out)
+    model = TestModel(out)
 
     x = np.zeros((1, 224, 224, 3), dtype=np.float32)
 
