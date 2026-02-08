@@ -10,15 +10,12 @@ from PIL import Image, UnidentifiedImageError
 
 BASE_DIR = Path(__file__).resolve().parent
 
-# Folder where all your models live
 MODELS_DIR = BASE_DIR / "data" / "train"
-
-# Class names are shared (assuming all models were trained on the same classes)
 CLASSES_PATH = MODELS_DIR / "class_names.json"
 
 DEFAULT_ANSWERS = 3
 
-# Registry of available models with their file paths and expected input sizes.
+# registry of available models
 MODEL_REGISTRY: Dict[str, Dict[str, object]] = {
     "default": {
         "path": MODELS_DIR / "saved_model_disaster_classifier.keras",
@@ -50,7 +47,7 @@ MODEL_REGISTRY: Dict[str, Dict[str, object]] = {
     },
 }
 
-# Check if class names file exists and load it
+# check if class names file exists and load it
 if not CLASSES_PATH.exists():
     raise FileNotFoundError(f"class_names.json not found at: {CLASSES_PATH}")
 
@@ -66,10 +63,8 @@ _MODEL_CACHE: Dict[str, tf.keras.Model] = {}
 
 
 def get_model_and_size(model_name: str) -> Tuple[tf.keras.Model, Tuple[int, int]]:
-    """
-    Returns (model, image_size) for the requested model_name.
-    Loads the model once and caches it in memory.
-    """
+    # Returns (model, image_size) for the requested model_name.
+    # Loads the model once and caches it in memory.
     if model_name not in MODEL_REGISTRY:
         raise HTTPException(
             status_code=400,
@@ -105,7 +100,7 @@ def predict_array(
     x: np.ndarray,
     top_k: int = DEFAULT_ANSWERS
 ) -> Tuple[str, float, List[Tuple[str, float]]]:
-    # Validate input early
+    # validate input
     if x.ndim != 4 or x.shape[-1] != 3:
         raise ValueError(f"Expected input shape (1,H,W,3). Got: {x.shape}")
 
@@ -154,10 +149,10 @@ async def predict(
     top_k: int = Query(DEFAULT_ANSWERS, ge=1, le=100),
     model_name: str = Query("default"),
 ):
-    # Choose model and required input size
+    # choose model and required input size
     model, image_size = get_model_and_size(model_name)
 
-    # 1. Validate file type
+    # 1. validate file type
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=415, detail="Unsupported media type. Upload an image (image/*).")
 
@@ -165,7 +160,7 @@ async def predict(
     if not raw:
         raise HTTPException(status_code=400, detail="Empty file.")
 
-    # 2. Decode image
+    # 2. decode image
     try:
         img = Image.open(io.BytesIO(raw))
         img.load()
@@ -176,13 +171,13 @@ async def predict(
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid image.") from e
 
-    # 3. Preprocess to the selected model's expected size
+    # 3. preprocess to the selected model's expected size
     try:
         x = preprocess_pil(img, image_size=image_size)
     except (ValueError, TypeError) as e:
         raise HTTPException(status_code=422, detail=f"Preprocessing failed: {e}") from e
 
-    # 4. Predict
+    # 4. predict
     try:
         label, conf, top = predict_array(model, x, top_k=top_k)
     except ValueError as e:
