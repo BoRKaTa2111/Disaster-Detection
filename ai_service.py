@@ -59,12 +59,12 @@ NUM_CLASSES = len(class_names)
 app = FastAPI(title="Disaster Classifier API", version="1.0")
 
 # Cache loaded models
-_MODEL_CACHE: Dict[str, tf.keras.Model] = {}
+MODEL_CACHE: Dict[str, tf.keras.Model] = {}
 
 
-def get_model_and_size(model_name: str) -> Tuple[tf.keras.Model, Tuple[int, int]]:
-    # Returns (model, image_size) for the requested model_name.
-    # Loads the model once and caches it in memory.
+def get_model_and_size(model_name: str) :
+    # returns (model, image_size) for the requested model_name
+    # loads the model once and caches it in memory
     if model_name not in MODEL_REGISTRY:
         raise HTTPException(
             status_code=400,
@@ -81,10 +81,10 @@ def get_model_and_size(model_name: str) -> Tuple[tf.keras.Model, Tuple[int, int]
             detail=f"Model file not found for '{model_name}': {model_path}",
         )
 
-    if model_name not in _MODEL_CACHE:
-        _MODEL_CACHE[model_name] = tf.keras.models.load_model(model_path, compile=False)
+    if model_name not in MODEL_CACHE:
+        MODEL_CACHE[model_name] = tf.keras.models.load_model(model_path, compile=False)
 
-    return _MODEL_CACHE[model_name], image_size  # type: ignore[return-value]
+    return MODEL_CACHE[model_name], image_size
 
 
 def preprocess_pil(img: Image.Image, image_size: Tuple[int, int]) -> np.ndarray:
@@ -93,7 +93,6 @@ def preprocess_pil(img: Image.Image, image_size: Tuple[int, int]) -> np.ndarray:
     x = np.asarray(img, dtype=np.float32)
     x = np.expand_dims(x, axis=0)
     return x
-
 
 def predict_array(
     model: tf.keras.Model,
@@ -129,11 +128,11 @@ def predict_array(
     return pred_label, pred_conf, top
 
 
+# endpoint to list available models
+# curl (-X GET)"http://localhost:8000/models"
+# returns JSON with model names, file paths, image sizes, and existnce status.
 @app.get("/models")
 def list_models():
-    """
-    Quick helper endpoint so you (or your friend) can see which model_name values are valid.
-    """
     out = {}
     for name, meta in MODEL_REGISTRY.items():
         out[name] = {
@@ -143,6 +142,9 @@ def list_models():
         }
     return out
 
+# endpoint for image classification, accepts image upload and returns predictions
+# curl -X POST "http://localhost:8000/predict" -F "file=@path_to_image.jpg"
+# returns JSON with predicted class, confidence, and top-k predictions.
 @app.post("/predict")
 async def predict(
     file: UploadFile = File(...),

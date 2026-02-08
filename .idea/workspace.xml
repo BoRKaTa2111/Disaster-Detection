@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9647b502-d576-48a2-970e-5290d2c19471" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/test_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project.zip" beforeDir="false" afterPath="$PROJECT_DIR$/project.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_unit.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_unit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +41,7 @@
     "Python tests.Python tests for tests.unit_tests.test_preprocess_pil_shape_dtype.executor": "Run",
     "Python tests.Python tests in api_tests.py.executor": "Run",
     "Python tests.Python tests in test_api.py.executor": "Run",
+    "Python tests.Python tests in test_model.py.executor": "Run",
     "Python tests.Python tests in unit_tests.py.executor": "Run",
     "Python.ai_srvice.executor": "Run",
     "Python.check_balance.executor": "Run",
@@ -69,7 +69,7 @@
       <recent name="$PROJECT_DIR$/com/sofia/uni/fmi/python" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_unit.test_predict_array_topk_sorted_and_clamped.test_load_class_names_returns_list">
+  <component name="RunManager">
     <configuration name="ai_service" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PythonCourseProject" />
       <option name="ENV_FILES" value="" />
